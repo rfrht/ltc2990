@@ -3,9 +3,24 @@
 # LTC 2990 Quad I2C Voltage, Current and Temperature Monitor
 # Retrieves LTC2990 register and performs some basic operations.
 # Specs: http://www.linear.com/product/LTC2990
-# By: Rodrigo Freire
-# Date: 2014 Apr 13
+# Source: https://github.com/rfrht/ltc2990
 #
+# Copyright (C) 2015 Rodrigo A B Freire
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+# USA.
 
 import smbus
 bus = smbus.SMBus(1)   # 512-MB RPi the bus is 1. Otherwise, bus is 0.
@@ -69,13 +84,24 @@ def voltage(msb,lsb):
   #print volt
   return volt
 
-print "Temperature: %s Celsius" %temperature(r4,r5)
+
+print "Int. Temp. : %s Celsius" %temperature(r4,r5)
 
 print "Voltage V1 : %s V" %voltage(r6,r7)
 print "Voltage V2 : %s V" %voltage(r8,r9)
 print "Voltage V3 : %s V" %voltage(ra,rb)
 print "Voltage V4 : %s V" %voltage(rc,rd)
 
-vin=voltage(re,rf) + 2.5
+# If you want to use TR, use the temperature(msb,lsb) function to get the
+# value. I.e., if you have set the mode TR1 & TR2 (mode 0x5d),
+# Comment the print "Voltage" lines and uncomment these ones:
+
+# TR1
+# print "Temperature TR1: %s Celsius" %temperature(r6,r7)
+# TR2
+# print "Temperature TR2: %s Celsius" %temperature(ra,rb)
+
+# And print the supply voltage:
+vin = voltage(re,rf) + 2.5
 print "Vin        : %s V" %vin
 
