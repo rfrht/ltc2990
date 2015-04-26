@@ -11,7 +11,7 @@ Sample output:
 
 ~~~
 root@raspberrypi:~# python i2c-ltc2990.py
-Temperature: 30 C
+Int. Temp. : 30 C
 Voltage V1 : 3.29624918 V
 Voltage V2 : 3.29624918 V
 Voltage V3 : 3.29624918 V
