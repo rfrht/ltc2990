@@ -24,7 +24,10 @@
 
 import smbus
 bus = smbus.SMBus(1)   # 512-MB RPi the bus is 1. Otherwise, bus is 0.
-address = 0x4f         # I2C chip address
+
+# Pro tip: Ensure that ADR0 and ADR1 are grounded. Do not let them
+# open. Otherwise, the i2c address will randomly change.a
+address = 0x4c         # I2C chip address
 mode = 0x5f            # Register 0x01 mode select. V1, V2, V3, V4
 
 try:
