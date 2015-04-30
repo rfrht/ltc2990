@@ -1,4 +1,4 @@
-#!/usr/bin/python -x
+#!/usr/bin/python
 # 
 # LTC 2990 Quad I2C Voltage, Current and Temperature Monitor
 # Retrieves LTC2990 register and performs some basic operations.
@@ -23,6 +23,7 @@
 # USA.
 
 import smbus
+import time
 bus = smbus.SMBus(1)   # 512-MB RPi the bus is 1. Otherwise, bus is 0.
 
 # Pro tip: Ensure that ADR0 and ADR1 are grounded. Do not let them
@@ -31,10 +32,10 @@ address = 0x4c         # I2C chip address
 mode = 0x5f            # Register 0x01 mode select. V1, V2, V3, V4
 
 try:
-  r1 = bus.read_byte_data(address, 0x01)     # Retrieve current mode select
-  if r1 != mode:                             # If current mode != R1
-    bus.write_byte_data(address, 0x01, mode) # Initializes the IC
-
+  if bus.read_byte_data(address, 0x01) != mode: # If current IC mode != program mode
+    bus.write_byte_data(address, 0x01, mode)    # Initializes the IC and set mode
+    bus.write_byte_data(address, 0x02, 0x00)    # Trigger a initial data collection
+    time.sleep(1)				# Wait a sec, just for init
 except IOError, err:
   print err
 
@@ -69,27 +70,16 @@ def temperature(msb,lsb):
 
 def voltage(msb,lsb):
   msb = format(msb, '08b')
-  # print "Raw MSB: %s" %msb
   msb = msb[1:]
-
   lsb = format(lsb, '08b')
-  #print "Raw LSB: %s" %lsb
-
   signal = get_bit(int(msb, 2),6)
   #print "positive:0 negative:1 %s" %signal
-  #print "msb: %s" %msb[1:]
-  #print "lsb: %s" %lsb
-
   volt = msb[1:] + lsb
-
-  #print "volt: %s" %volt
   volt = int(volt, 2) * 0.00030518
-  #print volt
   return volt
 
 
 print "Int. Temp. : %s Celsius" %temperature(r4,r5)
-
 print "Voltage V1 : %s V" %voltage(r6,r7)
 print "Voltage V2 : %s V" %voltage(r8,r9)
 print "Voltage V3 : %s V" %voltage(ra,rb)
