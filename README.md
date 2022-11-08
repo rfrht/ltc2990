@@ -18,3 +18,5 @@ Voltage V3 : 3.29624918 V
 Voltage V4 : 3.29624918 V
 Vin        : 3.2949939 V
 ~~~
+
+*[RepRap Ltd](https://github.com/RepRapLtd/Walking-robots/tree/main/Petoi) created a [forked version](https://github.com/RepRapLtd/Walking-robots/blob/main/Petoi/Software/Pi/rrlpetoi.py) that provides continous readings*
